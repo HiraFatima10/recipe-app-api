@@ -22,13 +22,19 @@ RUN python -m venv /py && \
         then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi && \
     # remove the /tmp directory to make the image light weighted.
-    rm -rf /tmp && \     
+    rm -rf /tmp     
     # Add new user inside docker image. using root user is not recommended. 
-    adduser \
-        --disabled-password \
-        --no-create-home \
-        django-user
+#     adduser \
+#         --disabled-password \
+#         --no-create-home \
+#         django-user 
+        
+# # Change ownership of the /app directory to django-user        
+# RUN chown -R django-user:django-user /app
+
 
 ENV PATH="/py/bin:$PATH"
 
-USER django-user
+
+
+# USER django-user
