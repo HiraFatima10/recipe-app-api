@@ -17,12 +17,16 @@ ARG DEV=false
 # using multiple commands in single RUN to prevent docker for creating multiple layers.
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
+    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .tmp-build-deps \
+        build-base postgresql-dev musl-dev && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ]; \
         then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi && \
     # remove the /tmp directory to make the image light weighted.
-    rm -rf /tmp     
+    rm -rf /tmp \
+    apk del .tmp-build-deps 
     # Add new user inside docker image. using root user is not recommended. 
 #     adduser \
 #         --disabled-password \
@@ -31,6 +35,9 @@ RUN python -m venv /py && \
         
 # # Change ownership of the /app directory to django-user        
 # RUN chown -R django-user:django-user /app
+
+# RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+
 
 
 ENV PATH="/py/bin:$PATH"
