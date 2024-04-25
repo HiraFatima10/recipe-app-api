@@ -6,16 +6,17 @@ from django.contrib.auth.admin import UserAdmin as BaseuserAdmin
 from django.utils.translation import gettext_lazy as _
 from core import models
 
+
 class UserAdmin(BaseuserAdmin):
     """Define the admin pages for users."""
     ordering = ['id']
     list_display = ['email', 'name']
     fieldsets = (
-        (None, {'fields':('email','password')}),
+        (None, {'fields': ('email', 'password')}),
         (
             _('Permission'),
             {
-                'fields':(
+                'fields': (
                     'is_active',
                     'is_staff',
                     'is_superuser',
@@ -27,8 +28,8 @@ class UserAdmin(BaseuserAdmin):
     readonly_fields = ['last_login']
     add_fieldsets = (
         (None, {
-            'classes':('wide',),
-            'fields' : (
+            'classes': ('wide',),
+            'fields': (
                 'email',
                 'password1',
                 'password2',
@@ -39,5 +40,6 @@ class UserAdmin(BaseuserAdmin):
             )
         }),
     )
+
 
 admin.site.register(models.User, UserAdmin)
